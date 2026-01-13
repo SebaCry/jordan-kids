@@ -1,72 +1,73 @@
-const NinosTable = ({ ninos, onAgregarPuntos, onRestarPuntos, onEliminar }) => {
-  const actividades = [
-    { key: 'traerBiblia', label: 'Biblia', puntos: 2 },
-    { key: 'versiculoMemorizado', label: 'Versículo', puntos: 2 },
-    { key: 'participacion', label: 'Participación', puntos: 1 },
-    { key: 'busquedaRapida', label: 'Búsqueda', puntos: 2 },
-    { key: 'traerAmigo', label: 'Amigo', puntos: 5 },
-    { key: 'responderPreguntas', label: 'Preguntas', puntos: 1 },
-    { key: 'asistenciaPuntual', label: 'Asistencia', puntos: 1 },
-    { key: 'realizarOracion', label: 'Oración', puntos: 1 }
-  ];
+import { Pencil, Trash2, Trophy, User } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+
+const NinosTable = ({ ninos, onEliminar }) => {
+  const navigate = useNavigate();
+
+  const handleEdit = (id) => {
+    navigate(`/edit/${id}`);
+  };
 
   return (
-    <div className="overflow-x-auto shadow-md rounded-lg">
-      <table className="w-full bg-white border-collapse">
+    <div className="overflow-x-auto shadow-2xl rounded-xl border border-slate-700">
+      <table className="w-full bg-gradient-to-br from-slate-800 to-slate-900 border-collapse">
         <thead>
-          <tr className="bg-green-500 text-white">
-            <th className="px-4 py-3 text-left text-xs font-bold">Nombre</th>
-            <th className="px-4 py-3 text-left text-xs font-bold">Apellido</th>
-            <th className="px-4 py-3 text-left text-xs font-bold">Edad</th>
-            {actividades.map(act => (
-              <th key={act.key} className="px-4 py-3 text-left text-xs font-bold">
-                {act.label} (+{act.puntos})
-              </th>
-            ))}
-            <th className="px-4 py-3 text-left text-xs font-bold">Total</th>
-            <th className="px-4 py-3 text-left text-xs font-bold">Acciones</th>
+          <tr className="bg-gradient-to-r from-purple-900 to-indigo-900 text-white border-b border-purple-700">
+            <th className="px-6 py-4 text-left text-sm font-bold">
+              <div className="flex items-center gap-2">
+                <User className="w-4 h-4" />
+                Nombre
+              </div>
+            </th>
+            <th className="px-6 py-4 text-left text-sm font-bold">Apellido</th>
+            <th className="px-6 py-4 text-left text-sm font-bold">Edad</th>
+            <th className="px-6 py-4 text-left text-sm font-bold">
+              <div className="flex items-center gap-2">
+                <Trophy className="w-4 h-4" />
+                Total Puntos
+              </div>
+            </th>
+            <th className="px-6 py-4 text-center text-sm font-bold">Acciones</th>
           </tr>
         </thead>
         <tbody>
-          {ninos.map(nino => (
-            <tr key={nino.id} className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
-              <td className="px-4 py-3 text-sm">{nino.nombre}</td>
-              <td className="px-4 py-3 text-sm">{nino.apellido}</td>
-              <td className="px-4 py-3 text-sm">{nino.edad}</td>
-              {actividades.map(act => (
-                <td key={act.key} className="px-2 py-3">
-                    <div className="flex items-center gap-1 mb-3">
-                      <span className="px-2 py-1 bg-gray-100 text-gray-800 text-xs font-semibold rounded min-w-[50px] text-center">
-                        {nino.puntos?.[act.key] || 0}
-                      </span>
-                    </div>
-                    <div className="flex gap-1">
-                      <button
-                        onClick={() => onRestarPuntos(nino.id, act.key)}
-                        className="px-2 py-1 bg-red-500 text-white text-xs font-bold rounded hover:bg-red-600 transition-colors duration-200"
-                        title="Restar punto"
-                      >
-                        -
-                      </button>
-                      <button
-                        onClick={() => onAgregarPuntos(nino.id, act.key)}
-                        className="px-2 py-1 bg-green-500 text-white text-xs font-bold rounded hover:bg-green-600 transition-colors duration-200"
-                        title="Agregar punto"
-                      >
-                        +
-                      </button>
-                    </div>
-                    
-                </td>
-              ))}
-              <td className="px-4 py-3 text-base font-bold text-green-600">{nino.total || 0}</td>
-              <td className="px-4 py-3">
-                <button
-                  onClick={() => onEliminar(nino.id)}
-                  className="px-3 py-1 bg-red-500 text-white text-xs rounded-md hover:bg-red-600 transition-colors duration-200"
-                >
-                  Eliminar
-                </button>
+          {ninos.map((nino, index) => (
+            <tr
+              key={nino.id}
+              className={`border-b border-slate-700 hover:bg-slate-700/50 transition-all duration-200 ${
+                index % 2 === 0 ? 'bg-slate-800/30' : 'bg-slate-800/50'
+              }`}
+            >
+              <td className="px-6 py-4 text-sm text-slate-200 font-medium">{nino.nombre}</td>
+              <td className="px-6 py-4 text-sm text-slate-200">{nino.apellido}</td>
+              <td className="px-6 py-4 text-sm text-slate-300">
+                <span className="px-3 py-1 bg-slate-700 rounded-full text-xs font-semibold">
+                  {nino.edad} años
+                </span>
+              </td>
+              <td className="px-6 py-4 text-base font-bold">
+                <span className="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg shadow-lg inline-flex items-center gap-2">
+                  <Trophy className="w-4 h-4" />
+                  {nino.total || 0}
+                </span>
+              </td>
+              <td className="px-6 py-4">
+                <div className="flex items-center justify-center gap-2">
+                  <button
+                    onClick={() => handleEdit(nino.id)}
+                    className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200 shadow-lg hover:shadow-blue-500/50 group"
+                    title="Editar niño"
+                  >
+                    <Pencil className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                  </button>
+                  <button
+                    onClick={() => onEliminar(nino.id)}
+                    className="p-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all duration-200 shadow-lg hover:shadow-red-500/50 group"
+                    title="Eliminar niño"
+                  >
+                    <Trash2 className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                  </button>
+                </div>
               </td>
             </tr>
           ))}

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { UserPlus } from 'lucide-react';
 
 const NinoForm = ({ onSubmit, ninoInicial = null }) => {
   const [nombre, setNombre] = useState(ninoInicial?.nombre || '');
@@ -8,20 +9,22 @@ const NinoForm = ({ onSubmit, ninoInicial = null }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit({ nombre, apellido, edad: parseInt(edad) });
-    setNombre('');
-    setApellido('');
-    setEdad('');
+    if (!ninoInicial) {
+      setNombre('');
+      setApellido('');
+      setEdad('');
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex gap-3 mb-6 p-5 bg-gray-50 rounded-lg shadow-sm">
+    <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4 p-6 bg-gradient-to-r from-slate-800 to-slate-700 rounded-xl shadow-2xl border border-slate-600">
       <input
         type="text"
         placeholder="Nombre"
         value={nombre}
         onChange={(e) => setNombre(e.target.value)}
         required
-        className="px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+        className="flex-1 px-4 py-3 text-sm bg-slate-900 text-white border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent placeholder-slate-400 transition-all"
       />
       <input
         type="text"
@@ -29,7 +32,7 @@ const NinoForm = ({ onSubmit, ninoInicial = null }) => {
         value={apellido}
         onChange={(e) => setApellido(e.target.value)}
         required
-        className="px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+        className="flex-1 px-4 py-3 text-sm bg-slate-900 text-white border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent placeholder-slate-400 transition-all"
       />
       <input
         type="number"
@@ -37,12 +40,13 @@ const NinoForm = ({ onSubmit, ninoInicial = null }) => {
         value={edad}
         onChange={(e) => setEdad(e.target.value)}
         required
-        className="px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent w-24"
+        className="w-full sm:w-24 px-4 py-3 text-sm bg-slate-900 text-white border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent placeholder-slate-400 transition-all"
       />
       <button
         type="submit"
-        className="px-4 py-2 bg-green-500 text-white text-sm font-medium rounded-md hover:bg-green-600 transition-colors duration-200"
+        className="px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-sm font-medium rounded-lg hover:from-purple-700 hover:to-indigo-700 transition-all duration-200 flex items-center justify-center gap-2 shadow-lg hover:shadow-purple-500/50"
       >
+        <UserPlus className="w-4 h-4" />
         {ninoInicial ? 'Actualizar' : 'Agregar Niño'}
       </button>
     </form>
