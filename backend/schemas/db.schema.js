@@ -1,5 +1,17 @@
 const { pgTable, serial, varchar, integer, timestamp } = require('drizzle-orm/pg-core');
 
+// Tabla de usuarios
+const users = pgTable('users', {
+  id: serial('id').primaryKey(),
+  email: varchar('email', { length: 255 }).notNull().unique(),
+  password: varchar('password', { length: 255 }).notNull(),
+  nombre: varchar('nombre', { length: 100 }).notNull(),
+  role: varchar('role', { length: 20 }).notNull().default('guest'),
+  refreshToken: varchar('refresh_token', { length: 500 }),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow()
+});
+
 // Tabla de niños
 const ninos = pgTable('ninos', {
   id: serial('id').primaryKey(),
@@ -40,6 +52,7 @@ const puntosActividades = {
 };
 
 module.exports = {
+  users,
   ninos,
   puntos,
   puntosActividades

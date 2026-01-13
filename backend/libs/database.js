@@ -1,6 +1,6 @@
 const { eq, sql, desc } = require('drizzle-orm');
 const { db } = require('./db.config');
-const { ninos, puntos } = require('../schemas/db.schema');
+const { users, ninos, puntos } = require('../schemas/db.schema');
 
 const database = {
   // Obtener todos los niños con sus puntos
@@ -166,6 +166,56 @@ const database = {
       },
       total: puntosData?.total || 0
     };
+  },
+
+  // ========== USER OPERATIONS ==========
+
+  // Crear usuario
+  async createUser(userData) {
+    try {
+      const [user] = await db.insert(users).values(userData).returning();
+      return user;
+    } catch (error) {
+      console.error('Error creating user:', error);
+      throw error;
+    }
+  },
+
+  // Obtener usuario por email
+  async getUserByEmail(email) {
+    try {
+      const result = await db.select().from(users).where(eq(users.email, email));
+      return result[0] || null;
+    } catch (error) {
+      console.error('Error getting user by email:', error);
+      throw error;
+    }
+  },
+
+  // Obtener usuario por ID
+  async getUserById(id) {
+    try {
+      const result = await db.select().from(users).where(eq(users.id, parseInt(id)));
+      return result[0] || null;
+    } catch (error) {
+      console.error('Error getting user by ID:', error);
+      throw error;
+    }
+  },
+
+  // Actualizar refresh token del usuario
+  async updateUserRefreshToken(userId, refreshToken) {
+    try {
+      await db.update(users)
+        .set({
+          refreshToken,
+          updatedAt: new Date()
+        })
+        .where(eq(users.id, parseInt(userId)));
+    } catch (error) {
+      console.error('Error updating refresh token:', error);
+      throw error;
+    }
   }
 };
 

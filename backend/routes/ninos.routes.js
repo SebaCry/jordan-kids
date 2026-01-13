@@ -1,9 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const ninoService = require('../services/nino.service');
+const { authMiddleware } = require('../middleware/auth.middleware');
+const { requireAdmin } = require('../middleware/roleCheck.middleware');
+
+// ========== RUTAS PÚBLICAS (requieren autenticación, cualquier rol) ==========
 
 // GET /api/ninos - Obtener todos los niños
-router.get('/', async (req, res) => {
+router.get('/', authMiddleware, async (req, res) => {
   try {
     const ninos = await ninoService.getAll();
     res.json(ninos);
@@ -13,7 +17,7 @@ router.get('/', async (req, res) => {
 });
 
 // GET /api/ninos/:id - Obtener niño por ID
-router.get('/:id', async (req, res) => {
+router.get('/:id', authMiddleware, async (req, res) => {
   try {
     const nino = await ninoService.getById(req.params.id);
     if (!nino) {
@@ -25,8 +29,10 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// ========== RUTAS PROTEGIDAS (solo ADMIN) ==========
+
 // POST /api/ninos - Crear niño
-router.post('/', async (req, res) => {
+router.post('/', authMiddleware, requireAdmin, async (req, res) => {
   try {
     const nuevoNino = await ninoService.create(req.body);
     res.status(201).json(nuevoNino);
@@ -36,7 +42,7 @@ router.post('/', async (req, res) => {
 });
 
 // PUT /api/ninos/:id - Actualizar niño
-router.put('/:id', async (req, res) => {
+router.put('/:id', authMiddleware, requireAdmin, async (req, res) => {
   try {
     const ninoActualizado = await ninoService.update(req.params.id, req.body);
     if (!ninoActualizado) {
@@ -49,7 +55,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // DELETE /api/ninos/:id - Eliminar niño
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authMiddleware, requireAdmin, async (req, res) => {
   try {
     const eliminado = await ninoService.delete(req.params.id);
     if (!eliminado) {
@@ -62,7 +68,7 @@ router.delete('/:id', async (req, res) => {
 });
 
 // POST /api/ninos/:id/puntos - Agregar puntos a una actividad
-router.post('/:id/puntos', async (req, res) => {
+router.post('/:id/puntos', authMiddleware, requireAdmin, async (req, res) => {
   try {
     const { actividad } = req.body;
     const ninoActualizado = await ninoService.agregarPuntos(req.params.id, actividad);
@@ -76,7 +82,7 @@ router.post('/:id/puntos', async (req, res) => {
 });
 
 // DELETE /api/ninos/:id/puntos - Restar puntos de una actividad
-router.delete('/:id/puntos', async (req, res) => {
+router.delete('/:id/puntos', authMiddleware, requireAdmin, async (req, res) => {
   try {
     const { actividad } = req.body;
     const ninoActualizado = await ninoService.restarPuntos(req.params.id, actividad);
