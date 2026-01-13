@@ -1,7 +1,7 @@
-import { Pencil, Trash2, Trophy, User } from 'lucide-react';
+import { Pencil, Trash2, Trophy, User, Eye } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-const NinosTable = ({ ninos, onEliminar }) => {
+const NinosTable = ({ ninos, onEliminar, readOnly = false }) => {
   const navigate = useNavigate();
 
   const handleEdit = (id) => {
@@ -53,20 +53,32 @@ const NinosTable = ({ ninos, onEliminar }) => {
               </td>
               <td className="px-6 py-4">
                 <div className="flex items-center justify-center gap-2">
-                  <button
-                    onClick={() => handleEdit(nino.id)}
-                    className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200 shadow-lg hover:shadow-blue-500/50 group"
-                    title="Editar niño"
-                  >
-                    <Pencil className="w-4 h-4 group-hover:scale-110 transition-transform" />
-                  </button>
-                  <button
-                    onClick={() => onEliminar(nino.id)}
-                    className="p-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all duration-200 shadow-lg hover:shadow-red-500/50 group"
-                    title="Eliminar niño"
-                  >
-                    <Trash2 className="w-4 h-4 group-hover:scale-110 transition-transform" />
-                  </button>
+                  {readOnly ? (
+                    <button
+                      onClick={() => handleEdit(nino.id)}
+                      className="p-2 bg-slate-600 text-white rounded-lg hover:bg-slate-700 transition-all duration-200 shadow-lg group"
+                      title="Ver detalles"
+                    >
+                      <Eye className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                    </button>
+                  ) : (
+                    <>
+                      <button
+                        onClick={() => handleEdit(nino.id)}
+                        className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200 shadow-lg hover:shadow-blue-500/50 group"
+                        title="Editar niño"
+                      >
+                        <Pencil className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                      </button>
+                      <button
+                        onClick={() => onEliminar(nino.id)}
+                        className="p-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all duration-200 shadow-lg hover:shadow-red-500/50 group"
+                        title="Eliminar niño"
+                      >
+                        <Trash2 className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                      </button>
+                    </>
+                  )}
                 </div>
               </td>
             </tr>

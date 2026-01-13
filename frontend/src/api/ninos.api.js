@@ -3,13 +3,17 @@ import API_CONFIG from '../config/api.config';
 const ninosAPI = {
   // Obtener todos los niños
   getAll: async () => {
-    const response = await fetch(`${API_CONFIG.baseURL}${API_CONFIG.endpoints.ninos}`);
+    const response = await fetch(`${API_CONFIG.baseURL}${API_CONFIG.endpoints.ninos}`, {
+      credentials: 'include' // CRÍTICO: enviar cookies de autenticación
+    });
     return response.json();
   },
 
   // Obtener niño por ID
   getById: async (id) => {
-    const response = await fetch(`${API_CONFIG.baseURL}${API_CONFIG.endpoints.ninos}/${id}`);
+    const response = await fetch(`${API_CONFIG.baseURL}${API_CONFIG.endpoints.ninos}/${id}`, {
+      credentials: 'include'
+    });
     return response.json();
   },
 
@@ -20,6 +24,7 @@ const ninosAPI = {
       headers: {
         'Content-Type': 'application/json'
       },
+      credentials: 'include',
       body: JSON.stringify(ninoData)
     });
     return response.json();
@@ -32,6 +37,7 @@ const ninosAPI = {
       headers: {
         'Content-Type': 'application/json'
       },
+      credentials: 'include',
       body: JSON.stringify(ninoData)
     });
     return response.json();
@@ -40,7 +46,8 @@ const ninosAPI = {
   // Eliminar niño
   delete: async (id) => {
     const response = await fetch(`${API_CONFIG.baseURL}${API_CONFIG.endpoints.ninos}/${id}`, {
-      method: 'DELETE'
+      method: 'DELETE',
+      credentials: 'include'
     });
     return response.json();
   },
@@ -52,6 +59,7 @@ const ninosAPI = {
       headers: {
         'Content-Type': 'application/json'
       },
+      credentials: 'include',
       body: JSON.stringify({ actividad })
     });
     return response.json();
@@ -64,6 +72,7 @@ const ninosAPI = {
       headers: {
         'Content-Type': 'application/json'
       },
+      credentials: 'include',
       body: JSON.stringify({ actividad })
     });
     return response.json();
