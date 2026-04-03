@@ -1,0 +1,25 @@
+{
+  "name": "jordan-kids",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "typecheck": "turbo typecheck",
+    "db:generate": "turbo db:generate --filter=@jordan-kids/db",
+    "db:migrate": "turbo db:migrate --filter=@jordan-kids/db",
+    "db:seed": "turbo db:seed --filter=@jordan-kids/db"
+  },
+  "devDependencies": {
+    "turbo": "^2.5.0",
+    "typescript": "^5.8.0"
+  },
+  "packageManager": "npm@10.8.0",
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
